@@ -4,6 +4,7 @@
 ---
 
 ## 🌍 Overview / 專案簡介
+The core mechanism of LBPO-Studio is to allow users to write their own task instructions and test cases. Based on these contents, the system will automatically search, test, and optimize the prompt words, enabling the model to perform better on these test cases.?? LBPO-Studio is designed to allow the model to automatically approach the "ideal output" you define.
 
 **LBPO_Studio** is an **AI-driven research and creation platform** exploring the dynamic relationships among **Language**, **Behavior**, **Personality**, and **Outcome**.  
 It integrates linguistic analysis, behavioral modeling, and cognitive visualization to understand how expression shapes thought, identity, and results.
