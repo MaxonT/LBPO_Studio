@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>LBPO-Studio · Static Demo v0.2</title>
+  <link rel="icon" href="data:image/svg+xml;utf8,
+  <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>
+    <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0' stop-color='%236366f1'/><stop offset='1' stop-color='%2306b6d4'/>
+    </linearGradient></defs>
+    <rect width='64' height='64' rx='14' fill='url(%23g)'/>
+    <path d='M14 40c6-16 12-24 18-24s12 8 18 24' stroke='%23fff' stroke-width='6' fill='none' stroke-linecap='round'/>
+    <circle cx='32' cy='40' r='5' fill='%23fff'/>
+  </svg>" type="image/svg+xml"/>
+  <style>
+    :root{
+      --bg:#ffffff; --fg:#0b0f19; --muted:#5f6b7a; --card:#f6f7f9; --border:#e6e8ec; --btn-bg:#0b0f19; --btn-fg:#ffffff;
+    }
+    :root[data-theme='dark']{
+      --bg:#0b0f19; --fg:#eef2f7; --muted:#9aa6b2; --card:#0f1422; --border:#1f2533; --btn-bg:#eef2f7; --btn-fg:#0b0f19;
+    }
+    @media (prefers-color-scheme: dark){
+      :root[data-theme='system']{
+        --bg:#0b0f19; --fg:#eef2f7; --muted:#9aa6b2; --card:#0f1422; --border:#1f2533; --btn-bg:#eef2f7; --btn-fg:#0b0f19;
+      }
+    }
+    *{box-sizing:border-box}
+    body{background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;
+      max-width:1000px;margin:32px auto;padding:0 18px}
+    h1{font-size:28px;margin:0 0 8px}
+    .muted{color:var(--muted)}
+    .card{border:1px solid var(--border);background:var(--card);border-radius:14px;padding:16px;margin:14px 0}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1 1 300px}
+    textarea,input,select,button{font-size:14px}
+    textarea{width:100%;min-height:90px}
+    input[type=text],input[type=password],input[type=number],select{width:100%;padding:8px;border:1px solid var(--border);
+      border-radius:10px;background:var(--bg);color:var(--fg)}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid var(--btn-bg);background:var(--btn-bg);color:var(--btn-fg);cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid var(--border);padding:8px;vertical-align:top;text-align:left}
+    pre,code{background:rgba(127,127,127,.08);padding:8px;border-radius:10px;overflow:auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .brand{display:flex;gap:10px;align-items:center}
+    .brand .logo{width:28px;height:28px}
+    .badge{font-size:12px;padding:2px 6px;border-radius:6px;border:1px solid var(--border);color:var(--muted)}
+    .toolbar{display:flex;gap:10px;align-items:center}
+    .footer{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:20px 0;font-size:13px}
+    a{color:inherit}
+    .banner{position:fixed;left:12px;right:12px;bottom:12px;background:var(--card);border:1px solid var(--border);
+      border-radius:12px;padding:12px;display:none;gap:10px;align-items:center}
+    .small{font-size:12px}
+    .checkbox-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center}
+    .modal{max-width:800px;width:90%;background:var(--bg);color:var(--fg);border:1px solid var(--border);border-radius:12px;padding:16px}
+    .modal header{justify-content:space-between;margin:0 0 8px}
+    .close{cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img class="logo" alt="logo" src="data:image/svg+xml;utf8,
+      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>
+        <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+          <stop offset='0' stop-color='%236366f1'/><stop offset='1' stop-color='%2306b6d4'/>
+        </linearGradient></defs>
+        <rect width='64' height='64' rx='14' fill='url(%23g)'/>
+        <path d='M14 40c6-16 12-24 18-24s12 8 18 24' stroke='%23fff' stroke-width='6' fill='none' stroke-linecap='round'/>
+        <circle cx='32' cy='40' r='5' fill='%23fff'/>
+      </svg>"/>
+      <div>
+        <div id="title">LBPO-Studio</div>
+        <div class="muted small">
+          <span id="desc">Optimize prompts via measurable outcomes.</span>
+          <span class="badge">Static Demo v0.2</span>
+        </div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <label id="langLabel" class="small">Language</label>
+      <select id="lang" title="Language"></select>
+      <label id="appearanceLabel" class="small">Appearance</label>
+      <select id="theme" title="Appearance">
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="row">
+      <div class="col">
+        <label data-i18n="task">Task Instruction</label>
+        <textarea id="instruction" placeholder="Classify sentiment as POS or NEG; return only POS or NEG."></textarea>
+        <div class="checkbox-row">
+          <input type="checkbox" id="remember"/>
+          <label id="rememberLabel" class="small" for="remember">Remember API key locally (unsafe on shared computers)</label>
+        </div>
+      </div>
+      <div class="col">
+        <label data-i18n="backend">Backend</label>
+        <select id="backend">
+          <option value="mock" selected>mock (offline)</option>
+          <option value="openai">openai</option>
+        </select>
+        <label data-i18n="apiKey">OpenAI API Key (optional)</label>
+        <input id="api_key" type="password" placeholder="sk-..." />
+        <label data-i18n="model">Model</label>
+        <input id="model" value="gpt-4o-mini" />
+        <label data-i18n="evaluator">Evaluator</label>
+        <select id="evaluator">
+          <option value="exact_match">exact_match</option>
+          <option value="keyword_f1">keyword_f1</option>
+        </select>
+        <div class="row">
+          <div class="col">
+            <label data-i18n="iterations">Iterations</label>
+            <input id="iterations" type="number" value="3" />
+          </div>
+          <div class="col">
+            <label data-i18n="beam">Beam Width</label>
+            <input id="beam_width" type="number" value="5" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 data-i18n="cases">Test Cases</h3>
+    <p id="casesHint" class="muted small">Each line is one case. Use format input || expected. For keyword_f1, expected = comma-separated keywords.</p>
+    <textarea id="cases" class="mono" placeholder="I love this || POS
+This is terrible || NEG"></textarea>
+  </div>
+
+  <div class="card">
+    <button id="run" class="btn">Run Optimization</button>
+    <span id="status" class="muted" style="margin-left:10px"></span>
+  </div>
+
+  <div id="result" class="card" style="display:none">
+    <h3 id="bestTitle">Best Prompt</h3>
+    <pre id="best"></pre>
+    <p><b id="bestScoreLabel">Best Score</b>: <span id="bestscore"></span></p>
+    <p><b id="artifactsLabel">Artifacts</b>: <a href="#" onclick="alert('Static demo: CSV download is disabled.');return false;">CSV</a> · <a href="#" onclick="alert('Static demo: JSON download is disabled.');return false;">JSON</a></p>
+  </div>
+
+  <div id="board" class="card" style="display:none">
+    <h3 id="boardTitle">Leaderboard</h3>
+    <table>
+      <thead><tr><th>#</th><th>Score</th><th>Prompt</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <div class="muted small">© 2025 LBPO-Studio. All rights reserved.</div>
+    <div class="muted small">
+      <a href="#" id="footerTerms">Terms</a> ·
+      <a href="#" id="footerPrivacy">Privacy</a> ·
+      <a href="#" id="footerCookies">Cookies</a>
+    </div>
+  </div>
+
+  <div id="cookieBanner" class="banner">
+    <span id="cookieText">We use cookies to store your preferences. Accept?</span>
+    <span style="flex:1"></span>
+    <button id="declineBtn" class="btn" style="background:transparent;color:var(--fg);border-color:var(--border)"></button>
+    <button id="acceptBtn" class="btn"></button>
+  </div>
+
+  <!-- Legal modals -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <header><h3 id="modalTitle">Legal</h3><span class="close" id="modalClose">✕</span></header>
+      <div id="modalBody" class="small"></div>
+    </div>
+  </div>
+
+  <script>
+    // 8-language dictionary
+    window.I18N = {
+      en: {title:"LBPO-Studio · Learning by Prompt Optimization",desc:"Optimize prompts via measurable outcomes.",task:"Task Instruction",backend:"Backend",apiKey:"OpenAI API Key (optional)",model:"Model",evaluator:"Evaluator",iterations:"Iterations",beam:"Beam Width",cases:"Test Cases",casesHint:"Each line is one case. Use format input || expected. For keyword_f1, expected = comma-separated keywords.",run:"Run Optimization",best:"Best Prompt",bestScore:"Best Score",artifacts:"Artifacts",leaderboard:"Leaderboard",appearance:"Appearance",system:"System",light:"Light",dark:"Dark",language:"Language",rememberKey:"Remember API key locally (unsafe on shared computers)",footerTerms:"Terms",footerPrivacy:"Privacy",footerCookies:"Cookies",cookieMsg:"We use cookies to store your language/theme preferences. No tracking. Accept?",accept:"Accept",decline:"Decline"},
+      zh: {title:"LBPO-Studio · 提示优化学习",desc:"通过可度量结果来优化提示词（Prompt）。",task:"任务说明",backend:"模型后端",apiKey:"OpenAI API Key（可选）",model:"模型",evaluator:"评估器",iterations:"迭代轮数",beam:"搜索宽度",cases:"测试用例",casesHint:"每行一条，格式 input || expected。若使用 keyword_f1，expected 为逗号分隔的关键字。",run:"开始优化",best:"最优提示词",bestScore:"最佳分数",artifacts:"导出文件",leaderboard:"排行榜",appearance:"外观",system:"跟随系统",light:"浅色",dark:"深色",language:"语言",rememberKey:"在本机记住 API Key（共享电脑不安全）",footerTerms:"条款",footerPrivacy:"隐私",footerCookies:"Cookie",cookieMsg:"我们仅用 Cookie 保存语言/主题偏好，不做跟踪。是否同意？",accept:"同意",decline:"拒绝"},
+      es: {title:"LBPO-Studio · Aprendizaje por Optimización de Prompts",desc:"Optimiza prompts con resultados medibles.",task:"Instrucción",backend:"Backend",apiKey:"Clave de OpenAI (opcional)",model:"Modelo",evaluator:"Evaluador",iterations:"Iteraciones",beam:"Ancho de haz",cases:"Casos de prueba",casesHint:"Cada línea: input || expected. Para keyword_f1: palabras clave separadas por comas.",run:"Iniciar optimización",best:"Mejor Prompt",bestScore:"Mejor puntuación",artifacts:"Archivos",leaderboard:"Clasificación",appearance:"Apariencia",system:"Sistema",light:"Claro",dark:"Oscuro",language:"Idioma",rememberKey:"Recordar clave localmente",footerTerms:"Términos",footerPrivacy:"Privacidad",footerCookies:"Cookies",cookieMsg:"Usamos cookies para idioma/tema. ¿Aceptar?",accept:"Aceptar",decline:"Rechazar"},
+      fr: {title:"LBPO-Studio · Apprentissage par Optimisation de Prompt",desc:"Optimisez les prompts via des résultats mesurables.",task:"Instruction",backend:"Backend",apiKey:"Clé OpenAI (optionnel)",model:"Modèle",evaluator:"Évaluateur",iterations:"Itérations",beam:"Largeur de faisceau",cases:"Jeux de test",casesHint:"Chaque ligne : input || expected. Pour keyword_f1 : mots-clés.",run:"Lancer l'optimisation",best:"Meilleur Prompt",bestScore:"Meilleure note",artifacts:"Fichiers",leaderboard:"Classement",appearance:"Apparence",system:"Système",light:"Clair",dark:"Sombre",language:"Langue",rememberKey:"Mémoriser la clé localement",footerTerms:"Conditions",footerPrivacy:"Confidentialité",footerCookies:"Cookies",cookieMsg:"Cookies pour langue/thème uniquement. Accepter?",accept:"Accepter",decline:"Refuser"},
+      de: {title:"LBPO-Studio · Lernen durch Prompt-Optimierung",desc:"Prompts anhand messbarer Ergebnisse optimieren.",task:"Aufgabenbeschreibung",backend:"Backend",apiKey:"OpenAI-API-Schlüssel (optional)",model:"Modell",evaluator:"Evaluator",iterations:"Iterationen",beam:"Strahlbreite",cases:"Testfälle",casesHint:"Pro Zeile: input || expected. Für keyword_f1: Schlüsselwörter.",run:"Optimierung starten",best:"Bestes Prompt",bestScore:"Bester Score",artifacts:"Artefakte",leaderboard:"Bestenliste",appearance:"Darstellung",system:"System",light:"Hell",dark:"Dunkel",language:"Sprache",rememberKey:"API-Schlüssel lokal merken",footerTerms:"AGB",footerPrivacy:"Datenschutz",footerCookies:"Cookies",cookieMsg:"Wir nutzen Cookies nur für Sprache/Theme. Akzeptieren?",accept:"Akzeptieren",decline:"Ablehnen"},
+      ja: {title:"LBPO-Studio · プロンプト最適化による学習",desc:"測定可能な結果でプロンプトを最適化。",task:"タスク説明",backend:"バックエンド",apiKey:"OpenAI API Key（任意）",model:"モデル",evaluator:"評価器",iterations:"反復回数",beam:"ビーム幅",cases:"テストケース",casesHint:"各行: input || expected。keyword_f1 はキーワードをカンマ区切り。",run:"最適化を実行",best:"最良プロンプト",bestScore:"最高スコア",artifacts:"ファイル",leaderboard:"ランキング",appearance:"外観",system:"システム",light:"ライト",dark:"ダーク",language:"言語",rememberKey:"APIキーをローカル保存",footerTerms:"利用規約",footerPrivacy:"プライバシー",footerCookies:"Cookie",cookieMsg:"言語/テーマのためのCookieのみ。許可しますか？",accept:"許可",decline:"拒否"},
+      ko: {title:"LBPO-Studio · 프롬프트 최적화 학습",desc:"측정 가능한 결과로 프롬프트를 최적화합니다.",task:"작업 지시",backend:"백엔드",apiKey:"OpenAI API 키(선택)",model:"모델",evaluator:"평가기",iterations:"반복",beam:"빔 폭",cases:"테스트 케이스",casesHint:"각 줄: input || expected. keyword_f1는 키워드 목록.",run:"최적화 실행",best:"최적 프롬프트",bestScore:"최고 점수",artifacts:"파일",leaderboard:"리더보드",appearance:"모양",system:"시스템",light:"라이트",dark:"다크",language:"언어",rememberKey:"API 키 로컬 저장",footerTerms:"약관",footerPrivacy:"개인정보",footerCookies:"쿠키",cookieMsg:"언어/테마만 저장합니다. 동의합니까?",accept:"동의",decline:"거부"},
+      pt: {title:"LBPO-Studio · Aprender por Otimização de Prompt",desc:"Otimize prompts com resultados mensuráveis.",task:"Instrução",backend:"Backend",apiKey:"Chave OpenAI (opcional)",model:"Modelo",evaluator:"Avaliador",iterations:"Iterações",beam:"Largura do feixe",cases:"Casos de teste",casesHint:"Cada linha: input || expected. Para keyword_f1: palavras-chave.",run:"Executar Otimização",best:"Melhor Prompt",bestScore:"Melhor Pontuação",artifacts:"Arquivos",leaderboard:"Ranking",appearance:"Aparência",system:"Sistema",light:"Claro",dark:"Escuro",language:"Idioma",rememberKey:"Lembrar a chave localmente",footerTerms:"Termos",footerPrivacy:"Privacidade",footerCookies:"Cookies",cookieMsg:"Usamos cookies só para idioma/tema. Aceitar?",accept:"Aceitar",decline:"Recusar"}
+    };
+
+    const $ = (s)=>document.querySelector(s);
+
+    const state = {
+      lang: localStorage.getItem('lbpo_lang') || (navigator.language||'en').slice(0,2),
+      theme: localStorage.getItem('lbpo_theme') || 'system',
+      consent: document.cookie.includes('lbpo_consent=1'),
+    };
+    if(!I18N[state.lang]) state.lang='en';
+    document.documentElement.setAttribute('data-theme', state.theme);
+
+    function t(k){ return (I18N[state.lang]||I18N.en)[k] || k; }
+    function renderTexts(){
+      $('#title').textContent = t('title');
+      $('#desc').textContent  = t('desc');
+      document.querySelector('[data-i18n="task"]').textContent = t('task');
+      document.querySelector('[data-i18n="backend"]').textContent = t('backend');
+      document.querySelector('[data-i18n="apiKey"]').textContent = t('apiKey');
+      document.querySelector('[data-i18n="model"]').textContent = t('model');
+      document.querySelector('[data-i18n="evaluator"]').textContent = t('evaluator');
+      document.querySelector('[data-i18n="iterations"]').textContent = t('iterations');
+      document.querySelector('[data-i18n="beam"]').textContent = t('beam');
+      document.querySelector('[data-i18n="cases"]').textContent = t('cases');
+      $('#casesHint').textContent = t('casesHint');
+      $('#run').textContent = t('run');
+      $('#bestTitle').textContent = t('best');
+      $('#bestScoreLabel').textContent = t('bestScore');
+      $('#artifactsLabel').textContent = t('artifacts');
+      $('#boardTitle').textContent = t('leaderboard');
+      $('#appearanceLabel').textContent = t('appearance');
+      $('#langLabel').textContent = t('language');
+      $('#rememberLabel').textContent = t('rememberKey');
+      $('#footerTerms').textContent = t('footerTerms');
+      $('#footerPrivacy').textContent = t('footerPrivacy');
+      $('#footerCookies').textContent = t('footerCookies');
+    }
+
+    function populateLang(){
+      const select = $('#lang'); select.innerHTML='';
+      Object.keys(I18N).forEach(code=>{
+        const o=document.createElement('option');
+        o.value=code; o.textContent=code.toUpperCase();
+        if(code===state.lang) o.selected=true;
+        select.appendChild(o);
+      });
+      select.addEventListener('change', e=>{
+        state.lang = e.target.value; localStorage.setItem('lbpo_lang', state.lang); renderTexts();
+      });
+    }
+
+    function initTheme(){
+      $('#theme').value = state.theme;
+      $('#theme').addEventListener('change', e=>{
+        state.theme = e.target.value;
+        document.documentElement.setAttribute('data-theme', state.theme);
+        localStorage.setItem('lbpo_theme', state.theme);
+      });
+    }
+
+    function initConsent(){
+      if(state.consent) return;
+      const banner = $('#cookieBanner');
+      banner.style.display='flex';
+      $('#cookieText').textContent = t('cookieMsg');
+      $('#acceptBtn').textContent = t('accept');
+      $('#declineBtn').textContent = t('decline');
+      $('#acceptBtn').onclick = ()=>{
+        document.cookie='lbpo_consent=1; Max-Age=31536000; Path=/';
+        banner.style.display='none';
+        state.consent = true;
+      };
+      $('#declineBtn').onclick = ()=>{ banner.style.display='none'; };
+    }
+
+    function simulateRun(){
+      $('#status').textContent = '...';
+      $('#run').disabled = true;
+      // Simulate 800ms "optimization"
+      setTimeout(()=>{
+        $('#result').style.display='block';
+        $('#board').style.display='block';
+        // Fake best prompt and scores
+        const best = [
+          "You are a concise assistant.\nTask: " + ($('#instruction').value.trim()||'Classify sentiment as POS or NEG; return only POS or NEG.') + "\nAdd rule: Answer only with POS or NEG in uppercase."
+        ].join('\n');
+        $('#best').textContent = best;
+        $('#bestscore').textContent = '1.0';
+        // Leaderboard
+        const rows = [
+          {score:1.0, prompt:best},
+          {score:0.83, prompt:"You are an expert system.\nTask: " + ($('#instruction').value.trim()||'...') + "\nAdd rule: Avoid explanations; answer only the required token(s)."},
+          {score:0.75, prompt:"System: You are precise.\nUser: " + ($('#instruction').value.trim()||'...') + "\nAssistant: Produce the answer only."}
+        ];
+        const tbody = $('#rows'); tbody.innerHTML='';
+        rows.forEach((r,i)=>{
+          const tr=document.createElement('tr');
+          tr.innerHTML = `<td>${i+1}</td><td>${r.score}</td><td><pre>${r.prompt.replaceAll('<','&lt;')}</pre></td>`;
+          tbody.appendChild(tr);
+        });
+        $('#status').textContent = 'OK';
+        $('#run').disabled = false;
+      }, 800);
+    }
+
+    function initRun(){
+      $('#run').addEventListener('click', simulateRun);
+    }
+
+    function openModal(title, body){
+      $('#modalTitle').textContent = title;
+      $('#modalBody').innerHTML = body;
+      $('#modal').style.display='flex';
+    }
+    function initLegal(){
+      $('#footerTerms').addEventListener('click', (e)=>{
+        e.preventDefault();
+        openModal('Terms of Service', `
+          <div class='card'>
+            <p>This static demo is provided “as is”. You are responsible for any content you enter locally.
+            No data leaves your browser. No warranty. For real deployments, add your own legal counsel.</p>
+            <ul>
+              <li>Fair use only; no abusive/illegal content.</li>
+              <li>Results are simulated for demo purposes.</li>
+              <li>Do not store secrets on shared devices.</li>
+            </ul>
+          </div>`);
+      });
+      $('#footerPrivacy').addEventListener('click', (e)=>{
+        e.preventDefault();
+        openModal('Privacy Policy', `
+          <div class='card'>
+            <p>This static demo stores optional preferences (language/theme) via localStorage/cookies if accepted.
+            No network requests are made. You can clear data in your browser settings.</p>
+          </div>`);
+      });
+      $('#footerCookies').addEventListener('click', (e)=>{
+        e.preventDefault();
+        openModal('Cookie Policy', `
+          <div class='card'>
+            <p>We use a single consent cookie <code>lbpo_consent</code> solely to remember if you accepted storing preferences.
+            No third-party trackers.</p>
+          </div>`);
+      });
+      $('#modalClose').addEventListener('click', ()=> $('#modal').style.display='none');
+      $('#modal').addEventListener('click', (e)=>{ if(e.target.id==='modal') $('#modal').style.display='none'; });
+    }
+
+    // Init
+    (function init(){
+      populateLang();
+      renderTexts();
+      initTheme();
+      initConsent();
+      initRun();
+      initLegal();
+    })();
+  </script>
+</body>
+</html>
