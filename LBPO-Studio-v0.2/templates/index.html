@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>LBPO-Studio</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml"/>
+  <link rel="stylesheet" href="/static/styles.css"/>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <img class="logo" src="/static/favicon.svg" alt="logo"/>
+      <div>
+        <div id="title">LBPO-Studio</div>
+        <div class="muted small"><span id="desc">Optimize prompts via measurable outcomes.</span> <span class="badge">v {{ version }}</span></div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <label id="langLabel" class="small">Language</label>
+      <select id="lang" title="Language"></select>
+      <label id="appearanceLabel" class="small">Appearance</label>
+      <select id="theme" title="Appearance">
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="card">
+    <div class="row">
+      <div class="col">
+        <label data-i18n-task>Task Instruction</label>
+        <textarea id="instruction" placeholder="Classify sentiment as POS or NEG; return only POS or NEG."></textarea>
+        <div class="checkbox-row">
+          <input type="checkbox" id="remember"/>
+          <label id="rememberLabel" class="small" for="remember">Remember API key locally (unsafe on shared computers)</label>
+        </div>
+      </div>
+      <div class="col">
+        <label data-i18n-backend>Backend</label>
+        <select id="backend">
+          <option value="mock">mock (offline)</option>
+          <option value="openai">openai</option>
+        </select>
+        <label data-i18n-apiKey>OpenAI API Key (optional)</label>
+        <input id="api_key" type="password" placeholder="sk-..." />
+        <label data-i18n-model>Model</label>
+        <input id="model" value="gpt-4o-mini" />
+        <label data-i18n-evaluator>Evaluator</label>
+        <select id="evaluator">
+          <option value="exact_match">exact_match</option>
+          <option value="keyword_f1">keyword_f1</option>
+        </select>
+        <div class="row">
+          <div class="col">
+            <label data-i18n-iterations>Iterations</label>
+            <input id="iterations" type="number" value="3" />
+          </div>
+          <div class="col">
+            <label data-i18n-beam>Beam Width</label>
+            <input id="beam_width" type="number" value="5" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 id="casesTitle">Test Cases</h3>
+    <p id="casesHint" class="muted small">Each line: input || expected. For keyword_f1: expected is comma-separated keywords.</p>
+    <textarea id="cases" class="mono" placeholder="I love this || POS
+This is terrible || NEG"></textarea>
+  </div>
+
+  <div class="card">
+    <button id="run" class="btn">Run Optimization</button>
+    <span id="status" class="muted" style="margin-left:10px"></span>
+  </div>
+
+  <div id="result" class="card" style="display:none">
+    <h3 id="bestTitle">Best Prompt</h3>
+    <pre id="best"></pre>
+    <p><b id="bestScoreLabel">Best Score</b>: <span id="bestscore"></span></p>
+    <p><b id="artifactsLabel">Artifacts</b>: <a id="csv" href="#" download>CSV</a> · <a id="json" href="#" download>JSON</a></p>
+  </div>
+
+  <div id="board" class="card" style="display:none">
+    <h3 id="boardTitle">Leaderboard</h3>
+    <table><thead><tr><th>#</th><th>Score</th><th>Prompt</th></tr></thead><tbody id="rows"></tbody></table>
+  </div>
+
+  <div class="footer">
+    <div class="muted small">© 2025 LBPO-Studio. All rights reserved.</div>
+    <div class="muted small">
+      <a href="/terms" id="footerTerms">Terms</a> ·
+      <a href="/privacy" id="footerPrivacy">Privacy</a> ·
+      <a href="/cookies" id="footerCookies">Cookies</a>
+    </div>
+  </div>
+
+  <div id="cookieBanner" class="banner">
+    <span id="cookieText">We use cookies to store your preferences. Accept?</span>
+    <span style="flex:1"></span>
+    <button id="declineBtn" class="btn" style="background:transparent;color:var(--fg);border-color:var(--border)"></button>
+    <button id="acceptBtn" class="btn"></button>
+  </div>
+
+  <script src="/static/i18n.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
