@@ -4,16 +4,8 @@
 ---
 
 ## 🌍 Overview / 專案簡介
----
-The core mechanism of LBPO-Studio is to allow users to write their own task instructions and test cases!!!
-LBPO-Studio的核心機制是允許用戶編寫自己的任務指令和測試用例！！
----
-Based on these contents, the system will automatically search, test, and optimize the prompt words, enabling the model to perform better on these test cases!!!
-基於這些內容，系統將自動搜索、測試和優化提示詞，使模型在這些測試用例上表現更好！！
----
-LBPO-Studio is designed to allow the model to automatically approach the "ideal output" you have defined!!!
-LBPO-Studio旨在讓模型自動接近您定義的“理想輸出”！！
----
+
+
 **LBPO_Studio** is an **AI-driven research and creation platform** exploring the dynamic relationships among **Language**, **Behavior**, **Personality**, and **Outcome**.  
 It integrates linguistic analysis, behavioral modeling, and cognitive visualization to understand how expression shapes thought, identity, and results.
 
@@ -32,5 +24,14 @@ It integrates linguistic analysis, behavioral modeling, and cognitive visualizat
 | 🤖 **AI Integration** | Seamlessly connects with **Humanzier** & **Prompt Enhancer** for advanced prompt optimization. / 與 Humanzier 及 Prompt Enhancer 系統無縫整合。 |
 | 💡 **Research Mode** | Export data for academic or applied behavioral-AI studies. / 支援學術或應用型研究資料導出。 |
 
+---
+The core mechanism of LBPO-Studio is to allow users to write their own task instructions and test cases!!!
+LBPO-Studio的核心機制是允許用戶編寫自己的任務指令和測試用例！！
+---
+Based on these contents, the system will automatically search, test, and optimize the prompt words, enabling the model to perform better on these test cases!!!
+基於這些內容，系統將自動搜索、測試和優化提示詞，使模型在這些測試用例上表現更好！！
+---
+LBPO-Studio is designed to allow the model to automatically approach the "ideal output" you have defined!!!
+LBPO-Studio旨在讓模型自動接近您定義的“理想輸出”！！
 ---
 
