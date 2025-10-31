@@ -25,4 +25,3 @@ It integrates linguistic analysis, behavioral modeling, and cognitive visualizat
 
 ---
 
-## 🧩 Architecture / 系統架構
