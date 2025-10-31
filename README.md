@@ -4,6 +4,7 @@
 ---
 
 ## 🌍 Overview / 專案簡介
+---
 The core mechanism of LBPO-Studio is to allow users to write their own task instructions and test cases!!!
 LBPO-Studio的核心機制是允許用戶編寫自己的任務指令和測試用例！！
 ---
