@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LBPO‑Studio · Demo</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;max-width:960px;margin:40px auto;padding:0 16px;}
+    h1{font-size:28px;margin-bottom:8px}
+    .muted{color:#666}
+    textarea,input,select,button{font-size:14px}
+    textarea{width:100%;min-height:90px}
+    .row{display:flex;gap:12px;flex-wrap:wrap}
+    .col{flex:1 1 300px}
+    .card{border:1px solid #e5e5e5;border-radius:12px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,0.04)}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid #222;background:#111;color:#fff;cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid #eee;padding:8px;vertical-align:top;text-align:left}
+    code{background:#f6f8fa;padding:2px 6px;border-radius:6px}
+    .mono{font-family:ui-monospace, Menlo, Consolas, monospace}
+  </style>
+</head>
+<body>
+  <h1>LBPO‑Studio · Learning by Prompt Optimization</h1>
+  <p class="muted">Optimize prompts via measurable outcomes. (中英双语 UI)</p>
+
+  <div class="card">
+    <div class="row">
+      <div class="col">
+        <label>Task Instruction（任务说明）</label>
+        <textarea id="instruction" placeholder="e.g., Classify sentiment as POS or NEG; return only POS or NEG."></textarea>
+      </div>
+      <div class="col">
+        <label>Backend（模型后端）</label>
+        <select id="backend">
+          <option value="mock">mock (offline)</option>
+          <option value="openai">openai</option>
+        </select>
+        <label>OpenAI API Key（可选）</label>
+        <input id="api_key" type="password" placeholder="sk-..." style="width:100%" />
+        <label>Model</label>
+        <input id="model" value="gpt-4o-mini" style="width:100%" />
+        <label>Evaluator（评估器）</label>
+        <select id="evaluator">
+          <option value="exact_match">exact_match</option>
+          <option value="keyword_f1">keyword_f1</option>
+        </select>
+        <div class="row">
+          <div class="col">
+            <label>Iterations</label>
+            <input id="iterations" type="number" value="3" style="width:100%" />
+          </div>
+          <div class="col">
+            <label>Beam Width</label>
+            <input id="beam_width" type="number" value="5" style="width:100%" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Test Cases（测试用例）</h3>
+    <p class="muted">Each line is one case. Use format <code>input || expected</code>. For <code>keyword_f1</code>, expected = comma‑separated keywords.</p>
+    <textarea id="cases" class="mono" placeholder="I love this || POS
+This is terrible || NEG"></textarea>
+  </div>
+
+  <div class="card">
+    <button id="run" class="btn">Run Optimization（开始优化）</button>
+    <span id="status" class="muted" style="margin-left:10px"></span>
+  </div>
+
+  <div id="result" class="card" style="display:none">
+    <h3>Best Prompt（最优提示词）</h3>
+    <pre id="best" class="mono" style="white-space:pre-wrap"></pre>
+    <p><b>Best Score:</b> <span id="bestscore"></span></p>
+    <p>Artifacts: <a id="csv" href="#" download>CSV</a> | <a id="json" href="#" download>JSON</a></p>
+  </div>
+
+  <div id="board" class="card" style="display:none">
+    <h3>Leaderboard（排行榜）</h3>
+    <table><thead><tr><th>#</th><th>Score</th><th>Prompt</th></tr></thead><tbody id="rows"></tbody></table>
+  </div>
+
+<script>
+async function run() {
+  const instruction = document.getElementById('instruction').value.trim();
+  const backend = document.getElementById('backend').value;
+  const api_key = document.getElementById('api_key').value.trim();
+  const model = document.getElementById('model').value.trim();
+  const evaluator = document.getElementById('evaluator').value;
+  const iterations = parseInt(document.getElementById('iterations').value, 10) || 3;
+  const beam_width = parseInt(document.getElementById('beam_width').value, 10) || 5;
+
+  const raw = document.getElementById('cases').value.trim().split('\n').filter(Boolean);
+  const testcases = raw.map(line => {
+    const parts = line.split('||');
+    return { input: (parts[0]||'').trim(), expected: (parts[1]||'').trim() };
+  });
+
+  const status = document.getElementById('status');
+  status.textContent = 'Running...';
+
+  const btn = document.getElementById('run');
+  btn.disabled = true;
+  try {
+    const res = await fetch('/optimize', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        instruction, backend, api_key, model, evaluator, iterations, beam_width, testcases
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      status.textContent = 'Error: ' + (data.error || res.status);
+      btn.disabled = false;
+      return;
+    }
+
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('board').style.display = 'block';
+    document.getElementById('best').textContent = data.best.prompt;
+    document.getElementById('bestscore').textContent = data.best.score;
+    document.getElementById('csv').href = data.artifacts.csv;
+    document.getElementById('json').href = data.artifacts.json;
+
+    const rows = document.getElementById('rows');
+    rows.innerHTML = '';
+    (data.leaderboard || []).forEach((row, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${i+1}</td><td>${row.score}</td><td class="mono">${row.prompt.replaceAll('<','&lt;')}</td>`;
+      rows.appendChild(tr);
+    });
+
+    status.textContent = 'Done.';
+  } catch (e) {
+    status.textContent = 'Exception: ' + e;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('run').addEventListener('click', run);
+</script>
+</body>
+</html>

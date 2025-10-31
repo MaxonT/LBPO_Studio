@@ -1,0 +1,17 @@
+{
+  "instruction": "Sentiment classification: respond exactly with POS or NEG.",
+  "backend": "mock",
+  "evaluator": "exact_match",
+  "iterations": 2,
+  "beam_width": 4,
+  "testcases": [
+    {
+      "input": "I absolutely love this movie!",
+      "expected": "POS"
+    },
+    {
+      "input": "The food was terrible and I hate it.",
+      "expected": "NEG"
+    }
+  ]
+}
