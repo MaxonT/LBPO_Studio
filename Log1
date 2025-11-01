@@ -1,0 +1,82 @@
+# 从雏形到作品 · From Prototype to Product
+**Date**: 2025-11-01  |  **Owner**: Tiger  |  **Project**: Promptly (Prompt Optimizer Studio)
+
+---
+
+## 1) Snapshot / 全局速览
+- **We shipped**: v0.5.3 → v0.5.4 (UI+) → v0.5.5 (Hotfix) → **v0.5.6 (Final)**
+- **Demo package**: `Promptly-v0.5.6-fusion-pro-legalized-full.zip`（双击 index.html 直开）
+- **Theme**: Dark / Light / System 全适配
+- **Languages**: EN + ZH + 7 语种核心词条生效（未覆盖回退英文）
+
+---
+
+## 2) What We Built Today / 今天完成清单
+**Brand & Footer / 品牌与页脚**
+- 动态渐变“Promptly”与彩色 ©；版权信息分行；版本号与支持邮箱清晰。
+
+**KPI System / 关键指标系统**
+- 标题渐变 + 数值灰梯度 + 渐变描边 + 圆角阴影统一。
+- **Δ 变化徽标**（↑/↓）+ **Target** 提示；底部 **sparkline** 趋势线。
+- **Last updated** 固定右上角、小字号、不遮挡。
+
+**Theme & Tokens / 主题与设计令牌**
+- Light 模式白底深字、阴影与对比度重算；深浅共用一套 tokens。
+
+**i18n & Language Fix / 多语言修复**
+- 中英 + 西/法/印地/阿/葡/日/韩 核心文案；缺失回退英文。若页面无选择器，自动补一个浮动选择器。
+
+**User Guide & Glossary / 使用说明与术语**
+- 三张默认图（折线/饼/仪表）+ 角标时间；Glossary 行高与间距优化。
+- **Instances 默认隐藏**，避免打扰终端用户视线。
+
+**Data Utilities（实操价值）**
+- Export / Import / Reset 接好，并写入 Glossary 的“能干什么”示例。
+- 典型场景：新人上手、A/B、跨设备迁移、复现缺陷、演示安全、回滚。
+
+**Run & Observability / 运行与可观测**
+- 顶部 **Run Demo**、**Logs 抽屉**、**Last run** 时间戳；运行后 KPI 历史推进并即时重绘。
+
+**Essential States / 必要状态**
+- **Empty / Error / Skeleton** 三态就位，提升系统“安全感”。
+
+---
+
+## 3) Before → After / 改进对比
+- “Last updated” 遮挡标题 → **右上角 + 小字号 + 卡片上内边距**，彻底避让。
+- Light 模式卡片仍黑底 → **白底 + 文本色/阴影匹配**。
+- 多语言仅中英生效 → **7 语种词条补齐 + 回退策略**。
+- Glossary 文案拥挤 → **行高 1.8、加粗词与正文留白**。
+- Instances 影响阅读 → **默认隐藏（DOM 级移除）**。
+
+---
+
+## 4) Decisions / 关键决策
+- 保持“叠加式补丁”策略（不改动核心结构，便于后续合并）。
+- 默认图内置到 `assets/`，无网络依赖，**保证演示稳定性**。
+- 数值历史用本地存储，**先验证前端体验**，后续可接后端。
+
+---
+
+## 5) Risks & Debts / 风险与技术债
+- KPI 真实计算尚未对接后端（当前为 Demo 历史）。
+- 语言覆盖待继续补全（现已正常回退）。
+- A/B 对比与报告导出未上线（下一步）。
+
+---
+
+## 6) Next 48h Plan / 接下来 48 小时
+- [ ] **A/B 对比视图**：vX ↔ vY 双曲线 + KPI 差值
+- [ ] **一键报告导出**：PNG 截图 + CSV 历史 + Markdown 简报
+- [ ] **Consent Banner & ? 快捷键弹窗**：首次存偏好提醒 + 帮助浮层
+- [ ] 语言包覆盖率面板：统计已翻译/未翻译键值
+- [ ] Target 可配置化（Settings / JSON 导入）
+
+---
+
+## 7) Demo Talking Points / 演示要点（60 秒）
+- **What**：可视化优先的 Prompt 优化工作台：写任务、导入用例、运行，KPI 与趋势即时刷新。
+- **Why**：更快上手、可复现、可回滚；**让团队用数据选 Prompt**。
+- **Now**：Dark/Light、8+ 语言、无后端依赖演示包，**即刻可路演**。
+
+> Keep going, Tiger — 今天我们把“想法”变成了“作品”。明天，把“作品”变成“证明”。
