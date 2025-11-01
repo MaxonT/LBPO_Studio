@@ -57,3 +57,18 @@ It replaces intuition-based prompt crafting with a **quantitative optimization l
 ---
 
 ## 📂 Project Structure
+---
+
+## 🧭 Example Workflow
+
+1. ✍️ Write your task instruction (e.g., “Summarize the paragraph academically”).  
+2. 🧪 Add several test cases (input + ideal output).  
+3. ⚙️ Click **Run Optimization**.  
+4. 📈 View ranked prompt candidates and performance metrics.  
+5. ✅ Export the best-performing prompt.
+
+---
+
+## 🔗 License
+
+MIT License © 2025 LBPO-Studio Contributors
