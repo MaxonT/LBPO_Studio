@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LBPO‑Studio v0.4 · Demo</title>
+<!--
+Title: LBPO‑Studio v0.4 · Demo
+Build: visualization-first prompt optimizer (offline)
+Author: Tiger & Assistant
+Note: Single-file demo. Open directly.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root{
+  --bg:#0b1020;--panel:#111831;--card:#0f1530;--text:#e7ecff;--muted:#9fb0ff;
+  --accent:#6ea8fe;--ok:#22c55e;--warn:#f59e0b;--danger:#ef4444
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#0b1020,#0a0f24);color:var(--text);font-family:Inter,system-ui}
+.wrap{max-width:1200px;margin:0 auto;padding:28px}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.title{font-weight:800;font-size:24px}
+.badge{padding:4px 10px;border-radius:999px;border:1px solid #2a3a7a;background:#0d1440;color:#a6b7ff}
+.card{background:linear-gradient(180deg,#0f1530,#0d1330 60%,#0a0f25);
+  border:1px solid #1e2a55;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.pad{padding:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+input,textarea,select,button{border-radius:12px;border:1px solid #243063;background:#0b1233;color:var(--text);padding:10px;width:100%}
+button{cursor:pointer;background:linear-gradient(180deg,#1e3a8a,#1f51a3);font-weight:800}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.kpi{border-radius:16px;border:1px solid #273167;background:#0c1333;padding:14px}
+.kpi .v{font-size:26px;font-weight:800}
+.mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;}
+.footer{margin-top:12px;color:#aab7ff66;text-align:center;font-size:12px}
+ul.inline{display:flex;gap:8px;flex-wrap:wrap;padding-left:0}
+ul.inline>li{list-style:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <div>
+      <div class="title">LBPO‑Studio v0.4 · <span id="sub">Visualization‑First Prompt Optimizer</span></div>
+      <div id="hint" style="color:#9fb0ff;font-size:13px;margin-top:6px">Describe your task in natural language → Click “Run Optimization” → Watch growth.</div>
+    </div>
+    <ul class="inline">
+      <li><span class="badge">v0.4 Demo</span></li>
+      <li><select id="lang">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+      </select></li>
+    </ul>
+  </div>
+
+  <div class="grid2" style="margin-top:12px">
+    <div class="card pad">
+      <h3 id="t_task">Task</h3>
+      <textarea id="task" rows="5" placeholder="e.g., Classify sentiment of a sentence; output POS or NEG only."></textarea>
+      <h3 style="margin-top:12px" id="t_examples">Examples (optional)</h3>
+      <textarea id="examples" rows="4" placeholder="POS || I love this!&#10;NEG || This is terrible."></textarea>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <select id="model">
+          <option value="gpt">OpenAI‑style</option>
+          <option value="claude">Claude‑style</option>
+          <option value="ollama">Ollama‑local</option>
+        </select>
+        <button id="run">▶ Run Optimization</button>
+      </div>
+    </div>
+    <div class="card pad">
+      <h3 id="t_best">Best Prompt</h3>
+      <textarea id="best" class="mono" rows="11" readonly placeholder="Click Run to generate…"></textarea>
+    </div>
+  </div>
+
+  <div class="kpis" style="margin-top:16px">
+    <div class="kpi"><div id="k1">Accuracy</div><div class="v" id="acc">—</div></div>
+    <div class="kpi"><div id="k2">F1</div><div class="v" id="f1">—</div></div>
+    <div class="kpi"><div id="k3">Pass Rate</div><div class="v" id="pass">—</div></div>
+    <div class="kpi"><div id="k4">Token Cost ↓</div><div class="v" id="cost">—</div></div>
+    <div class="kpi"><div id="k5">Progress %</div><div class="v" id="prog">—</div></div>
+  </div>
+
+  <div class="grid2" style="margin-top:16px">
+    <div class="card pad"><h3 id="c1">Growth Over Iterations (line)</h3><canvas id="line" height="160"></canvas></div>
+    <div class="card pad"><h3 id="c2">Change Contribution (bar)</h3><canvas id="bar" height="160"></canvas></div>
+  </div>
+
+  <div class="grid3" style="margin-top:16px">
+    <div class="card pad"><h3 id="c3">Pass vs Fail (%)</h3><canvas id="pie" height="140"></canvas></div>
+    <div class="card pad"><h3 id="c4">Progress Meter (%)</h3><canvas id="gauge" height="140"></canvas></div>
+    <div class="card pad"><h3 id="c5">Prompt Versions</h3><div id="versions" class="mono" style="white-space:pre-wrap;font-size:12px;color:#9fb0ff"></div></div>
+  </div>
+
+  <div class="footer">© LBPO‑Studio v0.4 · Demo · Works offline · Charts by Chart.js</div>
+</div>
+
+<script>
+const I18N={
+  en:{sub:"Visualization‑First Prompt Optimizer",hint:"Describe your task in natural language → Click “Run Optimization” → Watch growth.",task:"Task",examples:"Examples (optional)",best:"Best Prompt",k1:"Accuracy",k2:"F1",k3:"Pass Rate",k4:"Token Cost ↓",k5:"Progress %",c1:"Growth Over Iterations (line)",c2:"Change Contribution (bar)",c3:"Pass vs Fail (%)",c4:"Progress Meter (%)",c5:"Prompt Versions"},
+  zh:{sub:"以可视化为先的提示词优化器",hint:"用自然语言描述任务 → 点击“运行优化” → 观察增长。",task:"任务",examples:"样例（可选）",best:"最优 Prompt",k1:"准确率",k2:"F1",k3:"通过率",k4:"Token 成本 ↓",k5:"进度 %",c1:"迭代增长曲线（折线）",c2:"变更贡献榜（柱状）",c3:"通过 vs 失败（百分比）",c4:"进度仪表（百分比）",c5:"版本轨迹"}
+};
+function setLang(l){
+  const t=I18N[l];
+  sub.textContent=t.sub; hint.textContent=t.hint;
+  t_task.textContent=t.task; t_examples.textContent=t.examples; t_best.textContent=t.best;
+  k1.textContent=t.k1; k2.textContent=t.k2; k3.textContent=t.k3; k4.textContent=t.k4; k5.textContent=t.k5;
+  c1.textContent=t.c1; c2.textContent=t.c2; c3.textContent=t.c3; c4.textContent=t.c4; c5.textContent=t.c5;
+}
+lang.addEventListener("change",e=>setLang(e.target.value)); setLang("en");
+
+const lineChart=new Chart(document.getElementById("line"),{type:"line",data:{labels:[],datasets:[{label:"Accuracy",data:[],borderWidth:3,tension:.35}]},options:{plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+"%"}}}});
+const barChart=new Chart(document.getElementById("bar"),{type:"bar",data:{labels:[],datasets:[{label:"Δ Accuracy",data:[]}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>v+"%"}}}});
+const pieChart=new Chart(document.getElementById("pie"),{type:"doughnut",data:{labels:["Pass","Fail"],datasets:[{data:[0,100]}]},options:{plugins:{legend:{position:"bottom"}}}});
+const gaugeChart=new Chart(document.getElementById("gauge"),{type:"doughnut",data:{labels:["Progress","Remaining"],datasets:[{data:[0,100],cutout:"75%"}]},options:{plugins:{legend:{display:false}}}});
+
+function simulate(task, mode){
+  // deterministic-ish pseudo growth
+  const base = 52 + Math.random()*8;
+  let acc=base, f1=base-1+Math.random()*3, pass=base-4+Math.random()*6;
+  const steps=[
+    {name:"Explicit output schema",boost:4+Math.random()*2.5},
+    {name:"Few-shot from examples",boost:5+Math.random()*3},
+    {name:"Short CoT reasoning",boost:3+Math.random()*2},
+    {name:"Negative constraints",boost:2+Math.random()*1.5},
+    {name:"Self-check verifier",boost:4+Math.random()*2.5}
+  ];
+  const labels=[], series=[], barsL=[], barsV=[];
+  steps.forEach((s,i)=>{acc=Math.min(100,acc+s.boost);f1=Math.min(100,f1+s.boost*.9);pass=Math.min(100,pass+s.boost*.85);labels.push("v"+(i+1));series.push(Math.round(acc));barsL.push(s.name);barsV.push(Math.round(s.boost*10)/10)});
+  const best=[
+    "You are a precise assistant.",
+    "Task: "+(task||"Classify sentiment of a sentence; output POS or NEG only."),
+    "Rules:",
+    "1) Output POS or NEG only.",
+    "2) Think briefly, then output the label only.",
+    "3) If uncertain, prefer NEG."
+  ].join("\n");
+  return {
+    acc:Math.round(acc), f1:Math.round(f1), pass:Math.round(pass),
+    cost: 100 - Math.round(Math.random()*25),
+    labels, series, barsL, barsV, best,
+    versions: labels.map((l,i)=>`${l} · ${barsL[i]} · +${barsV[i]}%`).join("\n"),
+    progress: Math.round((acc-50)/0.5)
+  };
+}
+
+run.addEventListener("click",()=>{
+  const t=task.value.trim(); const r=simulate(t, model.value);
+  acc.textContent=r.acc+"%"; f1.textContent=r.f1+"%"; pass.textContent=r.pass+"%"; cost.textContent=r.cost+"%"; prog.textContent=r.progress+"%";
+  lineChart.data.labels=r.labels; lineChart.data.datasets[0].data=r.series; lineChart.update();
+  barChart.data.labels=r.barsL; barChart.data.datasets[0].data=r.barsV; barChart.update();
+  pieChart.data.datasets[0].data=[r.pass,100-r.pass]; pieChart.update();
+  gaugeChart.data.datasets[0].data=[r.acc,100-r.acc]; gaugeChart.update();
+  best.value=r.best;
+  versions.textContent=r.versions;
+});
+</script>
+</body>
+</html>
