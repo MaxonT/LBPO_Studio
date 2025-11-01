@@ -1,4 +1,4 @@
-Perfect 👍 Here’s the refined English + Simplified Chinese bilingual README for LBPO-Studio, keeping it professional yet easy to understand for open-source publication (ready to be used directly as README.md):
+
 
 ⸻
 
