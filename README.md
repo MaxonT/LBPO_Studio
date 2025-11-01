@@ -1,74 +1,127 @@
 ---
-title: "LBPO-Studio — Outcome-First Prompt Engineering"
-author: "LBPO-Studio Contributors"
+title: "LBPO‑Studio — The First Prototype of Promptly"
+subtitle: "Outcome‑First Prompt Optimization — where everything started"
+author: "Tiger Yang"
 date: "`r format(Sys.Date())`"
 output:
   html_document:
     toc: true
     toc_depth: 2
     number_sections: false
-    theme: readable
+    theme: cosmo
     df_print: paged
+  pdf_document:
+    toc: true
+    number_sections: false
 ---
 
-# 🧠 LBPO-Studio
-
----
-
-## 🌟 Overview
-
-**LBPO-Studio (Layer-Based Prompt Optimizer Studio)**  
-is an intelligent system that helps users **define**, **test**, and **optimize** prompts for large language models (LLMs).
-
-The core mechanism: **you write your own task instructions and test cases**.  
-Based on these, the system **searches**, **tests**, and **optimizes** prompts, improving model performance on your cases.
-
-Goal: **let the model automatically approach the “ideal output” you define.**
+> ⚠️ **Project Status · Archived**  
+> LBPO‑Studio 是我关于 **Outcome‑First Prompt Engineering（结果导向提示词优化）** 的**第一代原型**。  
+> 研发已迁移至 **Promptly** —— 一个更简洁、面向实时优化的新工作区。  
+> This repository is preserved for **reference and learning**.
 
 ---
 
-## ⚙️ Core Mechanism
+# 🌟 Overview · 概览
 
-| Step | Description |
-|:---:|---|
-| 1️⃣ | **User Input** — Users write task instructions and test cases. |
-| 2️⃣ | **Automatic Search** — The system explores multiple prompt candidates. |
-| 3️⃣ | **Evaluation & Testing** — Each prompt is tested on your defined cases. |
-| 4️⃣ | **Optimization** — LBPO-Studio refines prompts based on test performance. |
-| 5️⃣ | **Ideal Output Alignment** — The model approaches your defined “ideal output.” |
+**LBPO‑Studio (Layer‑Based Prompt Optimizer)** 是一套用于**定义、测试与优化**提示词（Prompts）的实验系统。  
+它不追求让模型“更聪明”，而是让提示词**更精准、可度量、与人类目标对齐**。
 
----
+- It helps you **define** your task spec & golden outputs  
+- Automatically **search, evaluate, and refine** prompts  
+- Tracks **delta improvements** across iterations
 
-## 💡 Key Features
+## 🧠 Core Loop · 核心循环
+```
+Define Spec → Generate Candidates → Evaluate → Optimize → Export
+```
 
-- 🧩 **Custom Task & Test Design** — Define your own tasks and evaluation metrics.  
-- 🔍 **Automated Prompt Search & Evaluation** — Iteratively find better prompt wordings.  
-- 🧠 **Performance-Driven Optimization** — Each iteration is scored and improved based on real test results.  
-- 🎯 **Outcome Alignment** — The model learns to match your **ideal output**.  
-- 🌐 **Multi-Language Interface** — Supports English, Spanish, French, Japanese, Korean, etc.
-
----
-
-## 🚀 Vision
-
-LBPO-Studio introduces a new paradigm of **Outcome-First Prompt Engineering**.  
-It replaces intuition-based prompt crafting with a **quantitative optimization loop** among prompts, tests, and model performance.
+## ✨ Core Concepts · 核心理念
+- **Outcome‑First Thinking｜结果导向** — 优化你真正想要的输出  
+- **Human‑in‑the‑Loop｜人类在环** — 由用户定义金标准输出  
+- **Prompt Evolution Tracking｜演化轨迹** — 可视化 Δ Accuracy / F1 / Pass Rate  
+- **Layered Architecture｜分层架构** — 将搜索、评测、反馈解耦
 
 ---
 
-## 📂 Project Structure
----
+# 📊 Key Features (v0.5 Final) · 关键特性
+- Visualization‑first dashboard（折线/柱状/仪表盘）  
+- Five real‑time metrics: **Accuracy / F1 / Pass Rate / Token Cost / Progress %**  
+- Multi‑language UI (English / 中文 / more)  
+- Prompt version history with **Δ performance**  
+- Two modes: **Demo (static‑UI)** & **Cloud (frontend + backend)**
 
-## 🧭 Example Workflow
-
-1. ✍️ Write your task instruction (e.g., “Summarize the paragraph academically”).  
-2. 🧪 Add several test cases (input + ideal output).  
-3. ⚙️ Click **Run Optimization**.  
-4. 📈 View ranked prompt candidates and performance metrics.  
-5. ✅ Export the best-performing prompt.
+> **Note:** This is the **final archived state** of LBPO‑Studio. Future work happens in **Promptly**.
 
 ---
 
-## 🔗 License
+# 🗂 Project Structure · 项目结构
+```
+LBPO_Studio/
+├─ LBPO-Studio-v0.5-Demo/       # Static UI preview (index.html)
+├─ LBPO-Studio-v0.5-Cloud/      # Backend + frontend version
+├─ docs/                        # Product overview & notes
+├─ README.md
+├─ LICENSE (MIT)
+└─ CHANGELOG.md
+```
 
-MIT License © 2025 LBPO-Studio Contributors
+---
+
+# 🚀 Legacy Impact · 传承与影响
+
+LBPO‑Studio 为 **Promptly** 奠定了概念与工程基础，  
+其中「Outcome‑First Real‑Time Alignment」观念在新项目中得到充分发展：
+
+> “Don’t make the model smarter.  
+> Make the **outcome** closer.”
+
+通过分层评测与可视化分析，LBPO‑Studio 将提示词优化从“灵感游戏”推进为一种**可工程化的流程**。
+
+---
+
+# 🧭 Successor Project · 后继项目
+
+**Promptly** — A cleaner, evolving workspace for **real‑time prompt testing, scoring, and refinement**.  
+All future development continues there.
+
+- Repo: *(to be added by you)*  
+- Live Demo: *(to be added by you)*
+
+---
+
+# 🖼 Screenshots · 截图（可选）
+
+> 将图片放在 `screenshots/` 目录，然后在此引用：
+
+- `screenshots/dashboard.png`  
+- `screenshots/evolution.gif`  
+
+```{r, echo=FALSE, out.width='80%', fig.align='center'}
+# placeholder example (no image embedded in this template)
+```
+
+---
+
+# 🗒 Changelog · 里程碑摘录
+- **v0.5** — Visualization dashboard, prompt evolution, bilingual UI, demo & cloud modes  
+- **v0.4** — Outcome‑metrics baseline, initial cloud wiring  
+- **v0.2** — First complete loop (spec → evaluate → optimize)
+
+> Full details are available in Releases (if published).
+
+---
+
+# 🪶 Author
+
+**Tiger Yang** · Vanderbilt University  
+Exploring **AI × Human Cognition × Product Design**
+
+> “Every prototype is a footprint of thought — not perfection, but evolution.”
+
+---
+
+# 📝 License
+
+MIT © LBPO‑Studio Contributors  
+This project is archived and preserved for reference.
