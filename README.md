@@ -1,90 +1,83 @@
+---
+title: "LBPO-Studio — Outcome-First Prompt Engineering（分层提示优化工作室）"
+author: "LBPO-Studio Contributors"
+date: "`r format(Sys.Date())`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: false
+    theme: readable
+    df_print: paged
+---
 
-
-⸻
-
-🧠 LBPO-Studio
+# 🧠 LBPO-Studio
 
 English | 中文（简体）
 
-⸻
+---
 
-🌟 Overview 概览
+## 🌟 Overview · 概览
 
-LBPO-Studio (Layer-Based Prompt Optimizer Studio)
-is an intelligent system that helps users define, test, and optimize prompts for large language models (LLMs).
+**LBPO-Studio (Layer-Based Prompt Optimizer Studio)**  
+is an intelligent system that helps users **define**, **test**, and **optimize** prompts for large language models (LLMs).
 
-The core mechanism of LBPO-Studio is to allow users to write their own task instructions and test cases.
-Based on these, the system will automatically search, test, and optimize prompt words, enabling the model to perform better on these cases.
+The core mechanism is: **you write your own task instructions and test cases**.  
+Based on these, the system **searches**, **tests**, and **optimizes** prompts, improving model performance on your cases.
 
-LBPO-Studio is designed to let your model automatically approach the “ideal output” you have defined.
+Goal: **let the model automatically approach the “ideal output” you define.**
 
-⸻
+---
 
-LBPO-Studio（分层提示优化工作室）
-是一个智能化系统，用于帮助用户定义、测试与优化大语言模型的提示词（Prompt）。
+**LBPO-Studio（分层提示优化工作室）**  
+用于帮助用户**定义**、**测试**与**优化**大语言模型的提示词（Prompt）。
 
-它的核心机制是让用户能够自行编写任务指令和测试用例。
-基于这些内容，系统会自动搜索、测试并优化提示词，从而让模型在这些测试场景上表现得更好。
+核心机制：**用户自行编写任务指令与测试用例**。  
+系统据此**搜索**、**测试**并**优化**提示词，让模型在你的场景上表现更好。
 
-LBPO-Studio 的目标是让模型自动接近你所定义的「理想输出」。
+目标：**让模型自动接近你所定义的「理想输出」**。
 
-⸻
+---
 
-⚙️ Core Mechanism 核心机制
+## ⚙️ Core Mechanism · 核心机制
 
-Step	Description (English)	说明（中文）
-1️⃣ User Input	Users write task instructions and test cases.	用户输入任务指令和测试用例。
-2️⃣ Automatic Search	System searches for different prompt candidates.	系统自动搜索不同的提示词方案。
-3️⃣ Evaluation & Testing	Each prompt is tested on your defined cases.	系统在测试用例上对提示词进行评估。
-4️⃣ Optimization	LBPO-Studio refines prompts based on test performance.	系统根据测试结果自动优化提示词。
-5️⃣ Ideal Output Alignment	The model approaches the “ideal output” you defined.	模型逐步接近你所定义的理想输出。
+| Step | Description (English) | 说明（中文） |
+|:---:|:---|:---|
+| 1️⃣ | **User Input** — Users write task instructions and test cases. | **用户输入**：编写任务指令与测试用例。 |
+| 2️⃣ | **Automatic Search** — System explores multiple prompt candidates. | **自动搜索**：系统生成与筛选多种提示词方案。 |
+| 3️⃣ | **Evaluation & Testing** — Test each prompt on your cases. | **评估与测试**：在测试用例上逐一评估提示词。 |
+| 4️⃣ | **Optimization** — Refine prompts based on test performance. | **优化**：依据测试结果自动迭代优化提示词。 |
+| 5️⃣ | **Ideal Output Alignment** — Approach your defined “ideal output.” | **对齐理想输出**：模型逐步接近你的目标答案。 |
 
+---
 
-⸻
+## 💡 Key Features · 主要特性
 
-💡 Key Features 主要特性
-	•	🧩 Custom Task & Test Design — Define your own tasks and evaluation metrics.
-	•	🔍 Automated Prompt Search & Evaluation — The system iteratively finds better prompt wordings.
-	•	🧠 Performance-Driven Optimization — Each iteration is scored and improved based on real test results.
-	•	🎯 Outcome Alignment — The model learns to match your “ideal output.”
-	•	🌐 Multi-Language Interface — Supports English / 中文 / Español / Français / 日本語 / 한국어, etc.
+- 🧩 **Custom Task & Test Design** — Define your own tasks and metrics.  
+  **自定义任务与测试**：可自定任务与评估指标。
 
-⸻
+- 🔍 **Automated Prompt Search & Evaluation** — Iteratively find better wordings.  
+  **自动搜索与评估**：迭代寻找更优提示表达。
 
-🚀 Vision 愿景
+- 🧠 **Performance-Driven Optimization** — Score and improve each iteration.  
+  **以表现为导向的优化**：以测试结果为依据持续改进。
 
-LBPO-Studio introduces a new paradigm of “Outcome-First Prompt Engineering.”
-It replaces intuition-based prompt crafting with a quantitative optimization loop between prompts, tests, and model performance.
+- 🎯 **Outcome Alignment** — Match your **ideal output**.  
+  **结果对齐**：对齐你定义的目标产出。
 
-LBPO-Studio 代表着一种全新的「结果优先提示工程（Outcome-First Prompt Engineering）」范式。
-它不依赖直觉，而是通过提示—模型—测试的可量化循环，实现持续优化与自我校准。
+- 🌐 **Multi-Language Interface** — English / 中文 / Español / Français / 日本語 / 한국어, etc.  
+  **多语言界面**：支持多语种切换。
 
-⸻
+---
 
-📂 Project Structure 项目结构
+## 🚀 Vision · 愿景
 
-LBPO_Studio/
-│
-├── frontend/        # Web interface for editing instructions & test cases
-├── backend/         # Core engine: prompt search, testing, optimization
-└── others/          # Docs, configs, and example templates
+LBPO-Studio introduces **Outcome-First Prompt Engineering** —  
+replacing intuition-based crafting with a **quantitative loop** among prompts, tests, and model performance.
 
+LBPO-Studio 代表**结果优先的提示工程**：  
+以**提示-模型-测试**的**量化闭环**取代拍脑袋式的写法，实现持续优化与自我校准。
 
-⸻
+---
 
-🧭 Example Workflow 示例流程
-	1.	✍️ Write your task instruction (e.g. “Summarize the paragraph academically”)
-	2.	🧪 Add several test cases (input + ideal output)
-	3.	⚙️ Click Run Optimization
-	4.	📈 View ranked prompt candidates and performance metrics
-	5.	✅ Export the best-performing prompt
-
-⸻
-
-🔗 License 授权
-
-MIT License © 2025 LBPO-Studio Contributors
-
-⸻
-
-Would you like me to add an installation & usage section next (with code blocks for running the frontend/backend)? That would make it fully ready for GitHub deployment.
+## 📂 Project Structure · 项目结构
