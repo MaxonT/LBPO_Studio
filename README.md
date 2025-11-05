@@ -127,8 +127,11 @@ VITE_API_BASE=https://your-backend.onrender.com
 ## Contributing
 Issues and PRs are welcome. Please include a minimal repro and screenshots/screencasts.
 
-## License
-MIT (unless otherwise specified for submodules).
+
+## 🪪 License
+© 2025 Tiger — Released under the MIT License.  
+Attribution is appreciated but not required.  
+This project embodies an open-source spirit — designed to inspire and evolve through collective creativity.  
 
 ## Acknowledgments
 Lucide icons · Inter font · Vercel · Render. Thanks to early users and reviewers!
